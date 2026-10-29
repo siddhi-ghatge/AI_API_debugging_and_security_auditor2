@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}AI API Auditor{% endblock %}</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+{% block extra_css %}{% endblock %}
+</head>
+<body>
+<div class="app-shell">
+{% if request.session.get('user_id') %}
+<aside class="sidebar" id="sidebar">
+  <a class="brand" href="/dashboard"><span class="brand-mark"><i class="bi bi-shield-check"></i></span><span>API Auditor</span></a>
+  <div class="sidebar-label">WORKSPACE</div>
+  <nav class="side-nav">
+    <a href="/dashboard"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a>
+    <a href="/api-analyzer"><i class="bi bi-radar"></i> API Analyzer</a>
+    <a href="/history"><i class="bi bi-clock-history"></i> API History</a>
+    <a href="/statistics"><i class="bi bi-bar-chart-fill"></i> Statistics</a>
+  </nav>
+  <div class="sidebar-label mt-4">SECURITY</div>
+  <div class="security-mini"><div class="mini-icon"><i class="bi bi-shield-lock-fill"></i></div><div><strong>Security First</strong><small>Audit every response</small></div></div>
+  <div class="sidebar-bottom">
+    <div class="user-chip"><span class="avatar">{{ (request.session.get('user_name') or 'U')[0]|upper }}</span><div class="min-w-0"><strong class="text-truncate d-block">{{ request.session.get('user_name') }}</strong><small>{{ request.session.get('user_email') }}</small></div></div>
+    <a class="logout-link" href="/logout"><i class="bi bi-box-arrow-right"></i> Sign out</a>
+  </div>
+</aside>
+<div class="mobile-topbar"><button class="icon-btn" onclick="document.getElementById('sidebar').classList.toggle('open')"><i class="bi bi-list"></i></button><a class="brand" href="/dashboard"><span class="brand-mark"><i class="bi bi-shield-check"></i></span>API Auditor</a></div>
+{% endif %}
+<div class="main-shell{% if not request.session.get('user_id') %} public-shell{% endif %}">
+{% if request.session.get('user_id') %}<header class="topbar"><div><span class="topbar-kicker">AI API DEBUGGING & SECURITY AUDITOR</span><span class="topbar-title">{{ self.title()|striptags }}</span></div><div class="top-actions"><span class="live-pill"><span></span> System Ready</span><a href="/api-analyzer" class="top-action-btn"><i class="bi bi-plus-lg"></i> New Analysis</a></div></header>{% endif %}
+<main class="page-content">{% block content %}{% endblock %}</main>
+<footer class="footer">AI API Auditor <span>•</span> Debug smarter. Secure better.</footer>
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.querySelectorAll('.side-nav a').forEach(a=>{if(a.pathname===location.pathname)a.classList.add('active')});
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>
